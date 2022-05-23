@@ -7,3 +7,4 @@ This CTF has a difficulty rating of easy and for the purpose of this CTF I will 
 
 Firstly, we begin this CTF with a zip file that contains a file for reverse engineering. The main goal is to reverse engineer the file and find the flag for submission. We can unzip the file and check the file-type by running the two following commands which will produce this output:
 
+![beginning](https://github.com/mmyers4/HTB-Writeup-1/blob/main/IMGS/Screenshot%20(723).png)
