@@ -44,3 +44,12 @@ Unpacked 1 file.
 I then decided to import the newly unpacked executable back into Ghidra to see if I could discover anything new. After importing the newly decompressed program into Ghidra, I noticed that there was quite a bit more data within the Import Results Summary. Therefore I decided to open the project in the code browser and run the analyzer again with the Aggressive Instruction Finder enabled. This allowed me to look into the decompiled code and continue analyzing this file. Furthermore, I decided to look for a main function within the program tree and found a main function in one of the files:
 
 ![found](https://github.com/mmyers4/HTB-Writeups/blob/main/IMGS/Screenshot%20(728).png)
+
+After looking into the main function, there are a few interesting things I have noticed. For example, I have very little to no experience with C++ but the decompiled code seems to resemble C++. Furthermore, I found an interesting collection of numbers and a call to an Exatlon function after prompting the user for a password, therefore, I took note of this function call and the numbers which are listed below:
+
+```text
+std::operator<<((basic_ostream *)std::cout,"[+] Enter Exatlon Password  : ");
+std::operator>>((basic_istream *)std::cin,(basic_string *)local_58);
+exatlon(local_38);
+bVar1 = std::operator==(local_38, "1152 1344 1056 1968 1728 816 1648 784 1584 816 1728 1520 1840 1664 784  1632 1856 1520 1728 816 1632 1856 1520 784 1760 1840 1824 816 1584 1856  784 1776 1760 528 528 2000 ");
+```
