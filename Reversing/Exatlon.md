@@ -53,3 +53,33 @@ std::operator>>((basic_istream *)std::cin,(basic_string *)local_58);
 exatlon(local_38);
 bVar1 = std::operator==(local_38, "1152 1344 1056 1968 1728 816 1648 784 1584 816 1728 1520 1840 1664 784  1632 1856 1520 1728 816 1632 1856 1520 784 1760 1840 1824 816 1584 1856  784 1776 1760 528 528 2000 ");
 ```
+
+I began some dynamic analysis by running the program in Radare and debugging it with breakpoints that stuck out to me within the Ghidra analysis. Noticeably, within the assembly, it looks like at the hex address of 0x00404d24, the exatlon function is being called. Therefore, I set a breakpoint in Radare at the next address following that function call: 0x00404d29
+
+```text
+┌──(kali㉿REbox)-[~/Reversing1]
+└─$ r2 exatlon_v1    
+WARNING: No calling convention defined for this file, analysis may be inaccurate.
+[0x00404990]> db 0x00404d29
+[0x00404990]> db
+0x00404d29 - 0x00404d2a 1 --x sw break enabled valid cmd="" cond="" name="0x00404d29" module=""
+[0x00404990]> doo
+Process with PID 2857 started...
+= attach 2857 2857
+File dbg:///home/kali/Reversing1/exatlon_v1  reopened in read-write mode
+2857
+[0x00404990]> dc
+
+███████╗██╗  ██╗ █████╗ ████████╗██╗      ██████╗ ███╗   ██╗       ██╗   ██╗ ██╗
+██╔════╝╚██╗██╔╝██╔══██╗╚══██╔══╝██║     ██╔═══██╗████╗  ██║       ██║   ██║███║
+█████╗   ╚███╔╝ ███████║   ██║   ██║     ██║   ██║██╔██╗ ██║       ██║   ██║╚██║
+██╔══╝   ██╔██╗ ██╔══██║   ██║   ██║     ██║   ██║██║╚██╗██║       ╚██╗ ██╔╝ ██║
+███████╗██╔╝ ██╗██║  ██║   ██║   ███████╗╚██████╔╝██║ ╚████║███████╗╚████╔╝  ██║
+╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝ ╚═══╝   ╚═╝
+
+
+[+] Enter Exatlon Password  : A
+hit breakpoint at: 0x404d29
+```
+
+After hitting the breakpoint, I wanted to continue to analyze the different registry addresses to see what was going on. Interestingly, There were a few noticable results when looking into the CPU registry. For instance, there were some references to ASCII which led me to believe the flag was encoded with some basic type of ASCII related code. Additionally, in the CPU registrys, r10 caught my eye with a four digit number that looked similar to the numbers in that long string of the main function. Therefore, with this knowledge I attempted to rerun the program with the input of 'H' as I knew the flag began with 'HTB'.
