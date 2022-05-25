@@ -41,4 +41,6 @@ UPX 3.96        Markus Oberhumer, Laszlo Molnar & John Reiser   Jan 23rd 2020
 Unpacked 1 file.
 ```
 
-I then decided to import the newly unpacked executable back into Ghidra to see if I could discover anything new.
+I then decided to import the newly unpacked executable back into Ghidra to see if I could discover anything new. After importing the newly decompressed program into Ghidra, I noticed that there was quite a bit more data within the Import Results Summary. Therefore I decided to open the project in the code browser and run the analyzer again with the Aggressive Instruction Finder enabled. This allowed me to look into the decompiled code and continue analyzing this file. Furthermore, I decided to look for a main function within the program tree and found a main function in one of the files:
+
+![found](https://github.com/mmyers4/HTB-Writeups/blob/main/IMGS/Screenshot%20(728).png)
