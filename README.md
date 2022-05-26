@@ -9,3 +9,5 @@ Below is a chart of my completed CTFs and you can click on the "CTF Name" to rea
 | CTF Name | Difficulty | Creator |
 | :--- | :--- | :--- |
 | [Exatlon](https://github.com/mmyers4/HTB-Writeups/blob/main/Reversing/Exatlon.md) | Easy | [OctopusTR](https://app.hackthebox.com/users/158119) |
+| [Bombs Landed](https://github.com/mmyers4/HTB-Writeups/blob/main/Reversing/BombsLanded.md) | Medium | [h3ph4est7s](https://app.hackthebox.com/users/57) |
+| [debugme](https://github.com/mmyers4/HTB-Writeups/blob/main/Reversing/Debugme.md) | Medium | [Malfurion](https://app.hackthebox.com/users/34125) |
