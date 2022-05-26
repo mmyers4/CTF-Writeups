@@ -3,7 +3,7 @@ This is a Hack The Box write up from a reverse engineering capture the flag.
 
 ### Starting information:
 
-This CTF has a difficulty rating of easy and for the purpose of this CTF I will be using Kali Linux to perform the reverse engineering.
+This CTF has a difficulty rating of easy and for the purpose of this CTF I will be using Kali Linux, Ghidra, and Radare2 to perform the reverse engineering and debugging.
 
 Firstly, I begin this CTF with a zip file that contains a file for reverse engineering. The main goal is to reverse engineer the file and find the flag for submission. Additionally, the flags for HackTheBox are in the format of HTB{flag}. To start with some basic information, I wanted to unzip the file and determine the file type of what we are given:
 
@@ -54,7 +54,7 @@ exatlon(local_38);
 bVar1 = std::operator==(local_38, "1152 1344 1056 1968 1728 816 1648 784 1584 816 1728 1520 1840 1664 784  1632 1856 1520 1728 816 1632 1856 1520 784 1760 1840 1824 816 1584 1856  784 1776 1760 528 528 2000 ");
 ```
 
-I began some dynamic analysis by running the program in Radare and debugging it with breakpoints that stuck out to me within the Ghidra analysis. Noticeably, within the assembly, it looks like at the hex address of 0x00404d24, the exatlon function is being called. Therefore, I set a breakpoint in Radare at the next address following that function call: 0x00404d29
+I began some dynamic analysis by running the program in Radare2 and debugging it with breakpoints that stuck out to me within the Ghidra analysis. Noticeably, within the assembly, it looks like at the hex address of 0x00404d24, the exatlon function is being called. Therefore, I set a breakpoint in Radare at the next address following that function call: 0x00404d29
 
 ```text
 ┌──(kali㉿REbox)-[~/Reversing1]
@@ -82,4 +82,27 @@ File dbg:///home/kali/Reversing1/exatlon_v1  reopened in read-write mode
 hit breakpoint at: 0x404d29
 ```
 
-After hitting the breakpoint, I wanted to continue to analyze the different registry addresses to see what was going on. Interestingly, There were a few noticable results when looking into the CPU registry. For instance, there were some references to ASCII which led me to believe the flag was encoded with some basic type of ASCII related code. Additionally, in the CPU registrys, r10 caught my eye with a four digit number that looked similar to the numbers in that long string of the main function. Therefore, with this knowledge I attempted to rerun the program with the input of 'H' as I knew the flag began with 'HTB'.
+After hitting the breakpoint, I wanted to continue to analyze the different registry addresses to see what was going on. Interestingly, There were a few noticable results when looking into the CPU registry. For instance, there were some references to ASCII which led me to believe the flag was encoded with some basic type of ASCII related code. Additionally, in the CPU registrys, r10 caught my eye with a four digit number that looked similar to the numbers in that long string of the main function. Furthermore, I tried a series of letters and noticed that four digit number was changing by 16 everytime. After further research, I noticed that the program was using bit shifting. Therefore, with this knowledge I attempted to rerun the program with the input of 'H' as I knew the flag began with 'HTB'. After attempting to input 'H' and re-checking the CPU Registry result, I was prompted with a noticeable result on r10:
+
+```text
+r10     7ffff59ed544     [stack] r10 stack R W 0x27e2ba0032353131 1152
+```
+
+When I noticed that inputting 'H' returned the same number at the beginning of that string of numbers I wanted to figure out how this number was being calculated so I began to look back into the program within Ghidra. With all of the information discovered, I wanted to further analyze the exatlon() function to see if this function was the one performing the encoding. Afterwards, I noticed that in the assembly code there was some bit shifting with the following line demonstrating the shift being performed:
+
+```text
+shl eax, 4
+```
+
+Assembly is not a strong suit of mine but I did some research and found that "shl" is shifting the bits to the left by the second argument provided which is 4 in this program. Essentially, the program is taking the ASCII code and shifting the bits to the left by 4. With all of this analysis and information, I thought a Python program would be fitting to loop through the encoded string and shift the bits back to the right then convert the bits back into characters using the built-in function chr() within Python. Here is the code that performed this:
+
+```python
+encodedString = [1152,1344,1056,1968,1728,816,1648,784,1584,816,1728,1520,1840,1664,784,1632,1856,1520,1728,816,1632,1856,1520,784,1760,1840,1824,816,1584,1856,784,1776,1760,528,528,2000]
+newString=""
+for x in encodedString:
+        ShiftedBit=x >> 4
+        newString=newString+chr(ShiftedBit)
+print(newString)
+```
+
+With this bit of Python code, I am given the flag for this challenge!
