@@ -28,4 +28,4 @@ This output gave me the general idea that the program is asking for some type of
 ** jefgowin
 ```
 
-After inputting the first key and trying a random string for the second, the program exited. Therefore, my next goal is to find the second key as this could be a way to get to the flag.
+After inputting the first key and trying a random string for the second, the program exited. Therefore, my next goal is to find the second key as this could be a way to get to the flag. I wanted to continue analyzing the file within Ghidra, therefore, I began to look at the various functions that were shown after the Ghidra analysis. Interestingly, I discovered a function called entry(), wherein this function is calling libc_start_main with some additional function calls inside the parameters. Furthermore, I decided to look into these functions and found where the program is printing the * symbol and the ** symbol after inputting the correct first key. If I look at FUN_0040085d, this is the function that contains these printf statements with the asterisk. Additionally, this function is also where the "SuperSeKretKey" is contained
