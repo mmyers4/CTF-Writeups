@@ -18,4 +18,14 @@ zsh: permission denied: ./impossible_password.bin
 [aaaaaaaaaa]
 ```
 
-This output gave me the general idea that the program is asking for some type of input and now the goal is to figure out the input that it wants and find the flag within this binary.
+This output gave me the general idea that the program is asking for some type of input and now the goal is to figure out the input that it wants and find the flag within this binary. Following these findings, I loaded the binary into Ghidra and performed an analysis along with a search for strings. I then found an interesting string: SuperSeKretKey. I attempted to execute the program again and this time the binary did not exit after this input. Consequently, it prompted me for further input as shown below:
+
+```text
+┌──(kali㉿REbox)-[~/Reversing1]
+└─$ ./impossible_password.bin                                                                      1 ⨯
+* SuperSeKretKey
+[SuperSeKretKey]
+** jefgowin
+```
+
+After inputting the first key and trying a random string for the second, the program exited. Therefore, my next goal is to find the second key as this could be a way to get to the flag.
